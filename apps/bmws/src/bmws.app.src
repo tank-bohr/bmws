@@ -1,0 +1,15 @@
+{application, bmws,
+ [
+  {description, "Bookmate websockets"},
+  {vsn, "1"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib,
+                  lager,
+                  cowboy,
+                  gproc
+                 ]},
+  {mod, { bmws_app, []}},
+  {env, []}
+ ]}.
