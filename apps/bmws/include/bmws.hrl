@@ -1,0 +1,3 @@
+-record (user, {
+  name = anonymous
+}).
