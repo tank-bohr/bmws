@@ -39,9 +39,11 @@ function toggle_connection(){
 
 function sendTxt() {
   if(websocket.readyState == websocket.OPEN){
-    txt = $("#send_txt").val();
-    websocket.send(txt);
-    showScreen('sending: ' + txt);
+    var recepient = $("#recepient").val();
+    var message = $("#message").val();
+    var resp = {"message": message, "recepient": recepient};
+    websocket.send(JSON.stringify(resp));
+    showScreen('sending: ' + resp.message + ' to ' + resp.recepient);
   } else {
     showScreen('websocket is not connected');
   };
