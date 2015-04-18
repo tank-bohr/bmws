@@ -61,7 +61,7 @@ function onClose(evt) {
 
 function onMessage(evt) {
   var resp = JSON.parse(evt.data);
-  showScreen('<span style="color: blue;">RESPONSE: ' + resp.message + '</span>');
+  showScreen('<span style="color: blue;">' + resp.message + ' from ' + resp.from + '</span>');
 };
 
 function onError(evt) {
