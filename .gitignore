@@ -1,3 +1,4 @@
 deps/*
 *.beam
 .rebar
+apps/bmws/ebin/bmws.app
