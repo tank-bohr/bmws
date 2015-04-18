@@ -11,8 +11,9 @@ init(Req, Opts) ->
   lager:info("Name: ~w", [Name]),
   {cowboy_websocket, Req, Opts}.
 
-websocket_handle({text, Msg}, Req, State) ->
-  {reply, {text, << "That's what she said! ", Msg/binary >>}, Req, State};
+websocket_handle({text, Message}, Req, State) ->
+  Reply = #{message => Message},
+  {reply, {text, jiffy:encode(Reply)}, Req, State};
 websocket_handle(_Data, Req, State) ->
   {ok, Req, State}.
 

@@ -9,7 +9,7 @@
       $(document).ready(init);
 
       function init() {
-          $('#server').val("ws://" + window.location.host + "/websocket/");
+          $('#server').val("ws://" + window.location.host + "/websocket/users/skammer");
           if(!("WebSocket" in window)){
               $('#status').append('<p><span style="color: red;">websockets are not supported </span></p>');
               $("#navigation").hide();
@@ -23,8 +23,7 @@
 
       function connect()
       {
-          // wsHost = $("#server").val()
-          wsHost = "ws://localhost:8080/websocket/users/skammer"
+          wsHost = $("#server").val()
           websocket = new WebSocket(wsHost);
           showScreen('<b>Connecting to: ' +  wsHost + '</b>');
           websocket.onopen = function(evt) { onOpen(evt) };
@@ -66,7 +65,8 @@
       };
 
       function onMessage(evt) {
-          showScreen('<span style="color: blue;">RESPONSE: ' + evt.data+ '</span>');
+        var resp = JSON.parse(evt.data);
+          showScreen('<span style="color: blue;">RESPONSE: ' + resp.message + '</span>');
       };
 
       function onError(evt) {
