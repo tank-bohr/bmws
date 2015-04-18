@@ -7,15 +7,19 @@
 -include ("bmws.hrl").
 
 init(Req, Opts) ->
-  Name = extract_name(Req),
-  lager:info("init name: ~w", [Name]),
-  User = #user{name=Name},
-  gproc:reg({p, l, Name}, Name),
-  {cowboy_websocket, Req, [{user, User} | Opts]}.
+  State = case extract_name(Req) of
+    undefined ->
+      Opts;
+    Name ->
+      lager:info("init name: ~w", [Name]),
+      gproc:reg({p, l, Name}, Name),
+      [{user, #user{name=Name}} | Opts]
+  end,
+  {cowboy_websocket, Req, State}.
 
 websocket_handle({text, Json}, Req, State) ->
   lager:debug("Json: ~w", [Json]),
-  #user{name = Name} = proplists:get_value(user, State),
+  #user{name = Name} = proplists:get_value(user, State, #user{}),
   lager:info("websocket_handle name: ~w", [Name]),
   {Data} = jiffy:decode(Json),
   lager:debug("Data: ~w", [Data]),

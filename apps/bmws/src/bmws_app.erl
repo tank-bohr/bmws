@@ -21,7 +21,7 @@ start_cowboy() ->
       {'_', [
         {"/", cowboy_static, {priv_file, bmws, "index.html"}},
         {"/websocket/[users/:name]", bmws_handler, []},
-        {"/static/[...]", cowboy_static, {priv_dir, bmws, "static"}}
+        {"/public/[...]", cowboy_static, {priv_dir, bmws, "public"}}
       ]}
     ]),
     cowboy:start_http(bmws_http_listener, 100, [{port, 8080}],

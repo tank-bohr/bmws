@@ -2,7 +2,7 @@ var websocket;
 $(document).ready(init);
 
 function init() {
-  $('#server').val("ws://" + window.location.host + "/websocket/users/skammer");
+  $('#server').val("ws://" + window.location.host + "/websocket");
   if(!("WebSocket" in window)){
     $('#status').append('<p><span style="color: red;">websockets are not supported </span></p>');
     $("#navigation").hide();
