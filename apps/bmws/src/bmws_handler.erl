@@ -30,7 +30,7 @@ websocket_handle({text, Json}, Req, State) ->
   JsonToSend = jiffy:encode({[{message, Message}, {from, Name}]}),
   lager:debug("JsonToSend: ~w", [JsonToSend]),
   gproc:send({p, l, Recepient}, {json, JsonToSend}),
-  Reply = jiffy:encode({[{message, <<"sent">>}]}),
+  Reply = jiffy:encode({[{message, <<"sent">>}, {from, me}]}),
   {reply, {text, Reply}, Req, State};
 websocket_handle(_Data, Req, State) ->
   {ok, Req, State}.

@@ -4,3 +4,4 @@ deps/*
 *.swp
 *.swo
 apps/bmws/ebin/bmws.app
+erl_crash.dump
