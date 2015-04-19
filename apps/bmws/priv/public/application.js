@@ -1,98 +1,113 @@
-function Bmws() {
-  this.init = function() {
-    $('#server').val(this.userHost());
-    if ("WebSocket" in window) {
-      $('#status').append('<p><span style="color: green;">websockets are supported </span></p>');
-      this.connect();
+(function () {
+  var websocket;
+
+  function init() {
+    $('#server').val(userHost());
+    if ('WebSocket' in window) {
+      showStatus('websockets are supported', 'green');
+      connect();
     } else {
-      $('#status').append('<p><span style="color: red;">websockets are not supported </span></p>');
+      showStatus('websockets are not supported', 'red');
       $("#navigation").hide();
     };
-    $("#connected").hide();
-    $("#content").hide();
+    $('#connected').hide();
+    $('#content').hide();
+
+    $('.btn_connection').on('click', toggleConnection);
+    $('.btn_send').on('click', sendText);
+    $('.btn_clear').on('click', clearScreen);
   };
 
-  this.login = function() {
-    return $("#login").val();
+  function login() {
+    return $('#login').val();
   };
 
-  this.serverHost = function() {
-    return "ws://" + window.location.host + "/websocket";
+  function serverHost() {
+    return 'ws://' + window.location.host + '/websocket';
   };
 
-  this.userHost = function() {
-    if (this.login()) {
-      return [this.serverHost(), "users", this.login()].join("/");
+  function userHost() {
+    if (login()) {
+      return [serverHost(), 'users', login()].join('/');
     } else {
-      return this.serverHost();
+      return serverHost();
     };
   };
 
-  this.connect = function() {
-    this.showScreen('<b>Connecting to: ' + this.userHost() + '</b>');
-    websocket = new WebSocket(this.userHost());
-    websocket.onopen    = function(event) { bmws.onOpen(event)    };
-    websocket.onclose   = function(event) { bmws.onClose(event)   };
-    websocket.onmessage = function(event) { bmws.onMessage(event) };
-    websocket.onerror   = function(event) { bmws.onError(event)   };
+  function connect() {
+    showScreen('<b>Connecting to: ' + userHost() + '</b>');
+    websocket = new WebSocket(userHost());
+    websocket.onopen    = function(event) { onOpen(event)    };
+    websocket.onclose   = function(event) { onClose(event)   };
+    websocket.onmessage = function(event) { onMessage(event) };
+    websocket.onerror   = function(event) { onError(event)   };
   };
 
-  this.disconnect = function() {
+  function disconnect() {
     websocket.close();
   };
 
-  this.toggle_connection = function() {
+  function toggleConnection() {
     if(websocket.readyState == websocket.OPEN){
-      this.disconnect();
+      disconnect();
     } else {
-      this.connect();
+      connect();
     };
   };
 
-  this.sendTxt = function() {
+  function sendText() {
     if(websocket.readyState == websocket.OPEN) {
-      var recepient = $("#recepient").val();
-      var message = $("#message").val();
-      var resp = {"message": message, "recepient": recepient};
+      var recepient = $('#recepient').val();
+      var message = $('#message').val();
+      var resp = { 'message': message, 'recepient': recepient };
       websocket.send(JSON.stringify(resp));
-      this.showScreen('<span style="color: red;">' + this.login() + '</span>: ' + resp.message + '<br>');
+      showMessage(message, login(), true);
       $("#message").val("");
     } else {
-      this.showScreen('websocket is not connected');
+      showScreen('websocket is not connected');
     };
   };
 
-  this.onOpen = function(event) {
-    this.showScreen('<span style="color: green;">CONNECTED </span>');
+  function onOpen(event) {
+    showScreen('CONNECTED', 'green');
     $("#connected").fadeIn('slow');
     $("#content").fadeIn('slow');
   };
 
-  this.onClose = function(event) {
-    this.showScreen('<span style="color: red;">DISCONNECTED </span>');
+  function onClose(event) {
+    showScreen('DISCONNECTED', 'red');
   };
 
-  this.onMessage = function(event) {
+  function onMessage(event) {
     var resp = JSON.parse(event.data);
-    this.showScreen('<span style="color: blue;">' + resp.from + '</span>: ' + resp.message);
+    showMessage(resp.message, resp.from, false);
   };
 
-  this.onError = function(event) {
-    this.showScreen('<span style="color: red;">ERROR: ' + event.data+ '</span>');
+  function onError(event) {
+    error = 'ERROR: ' + event.data;
+    showScreen(error, 'red');
   };
 
-  this.showScreen = function(txt) {
-    $('#output').prepend('<p>' + txt + '</p>');
+  function showMessage(message, from, is_mine) {
+    color = is_mine ? 'red' : 'blue'
+    $('#output')
+      .prepend('<p><span style="color: ' + color + ';">' + from + ': </span>' + message + '</p>');
+  }
+
+  function showScreen(text, color) {
+    $('#output')
+      .prepend('<p><span style="color: ' + color + ';">' + text + '</span></p>');
   };
 
-  this.clearScreen = function() {
-    $('#output').html("");
+  function showStatus(text, color) {
+    $('#status')
+      .append('<p><span style="color: ' + color + ';">' + text + '</span></p>')
+  }
+
+  function clearScreen() {
+    $('#output').html('');
   };
-};
 
-var websocket;
-var bmws = new Bmws();
+  $(document).ready(init);
 
-$(document).ready(function(){
-  bmws.init()
-});
+})(this);

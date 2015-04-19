@@ -15,19 +15,19 @@
 
     <div id="navigation">
       <p id="connecting">
-        <input type='text' id="login" value="" size="20" placeholder="Login"></input>
-        <input type='text' id="server" value="" size="50"></input>
-        <button type="button" onclick="bmws.toggle_connection()">connection</button>
+        <input type='text' id="login"  size="20" placeholder="Login"></input>
+        <input type='text' id="server" size="50"></input>
+        <button type="button" class="btn_connection">connection</button>
       </p>
       <div id="connected">
         <p>
           <input type='text' id="recepient" placeholder="Recepient"></input>
           <input type='text' id="message" placeholder="Message"></input>
-          <button type="button" onclick="bmws.sendTxt();">send</button>
+          <button type="button" class="btn_send">send</button>
         </p>
       </div>
       <div id="content">
-        <button id="clear" onclick="bmws.clearScreen()" >Clear text</button>
+        <button id="clear" class="btn_clear" >Clear text</button>
         <div id="output"></div>
       </div>
     </div>
