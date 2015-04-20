@@ -13,7 +13,7 @@
     $('#connected').hide();
     $('#content').hide();
 
-    $('.btn_connection').on('click', toggleConnection);
+    $('.btn_connect').on('click', toggleConnection);
     $('.btn_send').on('click', sendText);
     $('.btn_clear').on('click', clearScreen);
   };
@@ -100,7 +100,7 @@
   };
 
   function showStatus(text, color) {
-    $('#status')
+    $('.header .status')
       .append('<p><span style="color: ' + color + ';">' + text + '</span></p>')
   }
 

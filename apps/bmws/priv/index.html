@@ -1,33 +1,54 @@
+<!DOCTYPE html>
 <html>
-
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <title>Websocket client</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/application.css">
+
     <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"> -->
     <script src="/public/application.js"></script>
   </head>
 
   <body>
-    <div id="header">
+    <div class="page-header header">
       <h1>Websocket client</h1>
-      <div id="status"></div>
+      <div class="status"></div>
     </div>
 
-    <div id="navigation">
-      <p id="connecting">
-        <input type='text' id="login"  size="20" placeholder="Login"></input>
-        <input type='text' id="server" size="50"></input>
-        <button type="button" class="btn_connection">connection</button>
-      </p>
-      <div id="connected">
-        <p>
-          <input type='text' id="recepient" placeholder="Recepient"></input>
-          <input type='text' id="message" placeholder="Message"></input>
-          <button type="button" class="btn_send">send</button>
-        </p>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="form-inline">
+          <div class="form-group">
+            <input type="text" class="form-control" id="login" placeholder="Login" />
+          </div>
+          <div class="form-group server">
+            <input type="text" class="form-control" id="server" />
+          </div>
+          <button class="btn btn-default btn_connect">connect</button>
+        </div>
       </div>
-      <div id="content">
-        <button id="clear" class="btn_clear" >Clear text</button>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="form-group">
+          <input type="text" class="form-control" id="recepient" placeholder="Recepient" />
+        </div>
+        <div class="form-group">
+          <textarea class="form-control" rows="3" id="message" placeholder="Message" ></textarea>
+        </div>
+        <button class="btn btn-default btn_send">send</button>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <button id="clear" class="btn btn-primary btn_clear" >Clear text</button>
+      </div>
+      <div class="panel-body">
         <div id="output"></div>
       </div>
     </div>

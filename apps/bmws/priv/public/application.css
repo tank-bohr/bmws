@@ -1,0 +1,12 @@
+body {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.form-group.server {
+  width: 50%;
+}
+
+#server {
+  width: 100%;
+}
