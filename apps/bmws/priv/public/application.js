@@ -10,8 +10,8 @@
       showStatus('websockets are not supported', 'red');
       $("#navigation").hide();
     };
-    $('#connected').hide();
-    $('#content').hide();
+    $('.connected').hide();
+    $('.content').hide();
 
     $('.btn_connect').on('click', toggleConnection);
     $('.btn_send').on('click', sendText);
@@ -70,8 +70,8 @@
 
   function onOpen(event) {
     showScreen('CONNECTED', 'green');
-    $("#connected").fadeIn('slow');
-    $("#content").fadeIn('slow');
+    $(".connected").fadeIn('slow');
+    $(".content").fadeIn('slow');
   };
 
   function onClose(event) {
