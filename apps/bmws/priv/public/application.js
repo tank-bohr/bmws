@@ -20,36 +20,38 @@
     $('.btn_clear').on('click', clearScreen);
 
     $('.js-recipient-list').on('change', updateRecipient);
+
+    // updateRecipientList();
   };
 
   function updateRecipient() {
     $('#recipient').val($('.js-recipient-list').val());
   };
 
-  function updateRecipientList() {
+  // function updateRecipientList() {
+  //   $.ajax({
+  //     method: 'GET',
+  //     url: '/recipients',
+  //     success: function(resp) {
+  //       updateRecipients(resp.recipients)
+  //     }
+  //   })
+  // };
+
+  function updateRecipients(recipients) {
     var options = $('.js-recipient-list');
     var defaultOption = $('<option value="">Select a recipient</option>');
-
-    $.ajax({
-      method: 'GET',
-      url: '/recipients',
-      success: function(resp) {
-        options.html('');
-        options.append(defaultOption);
-        var recipients = resp.recipients.map(function(r) {
-          var option = $('<option value="' + r + '">' + r +  '</option>');
-          if(r === currentRecipient) {
-            option.attr('selected', 'selected');
-          }
-          options.append(option);
-          return option;
-        });
+    options.html('');
+    options.append(defaultOption);
+    recipients.map(function(r) {
+      var option = $('<option value="' + r + '">' + r +  '</option>');
+      if(r === currentRecipient) {
+        option.attr('selected', 'selected');
       }
-    })
-
+      options.append(option);
+      return option;
+    });
   };
-
-  updateRecipientList();
 
   function login() {
     return $('#login').val();
@@ -74,7 +76,7 @@
     websocket.onclose   = function(event) { onClose(event)   };
     websocket.onmessage = function(event) { onMessage(event) };
     websocket.onerror   = function(event) { onError(event)   };
-    updateRecipientList();
+    // updateRecipientList();
     $('.js-connect-button').html('disconnect');
   };
 
@@ -100,7 +102,7 @@
       websocket.send(JSON.stringify(resp));
       showMessage(message, login(), true);
       $("#message").val("");
-      updateRecipientList();
+      // updateRecipientList();
     } else {
       showScreen('websocket is not connected');
     };
@@ -118,16 +120,36 @@
 
   function onMessage(event) {
     var resp = JSON.parse(event.data);
-    showMessage(resp.message, resp.from, false);
+    switch(resp._type) {
+      case 'message':
+        showMessage(resp.message, resp.from, false);
+        break
+      case 'sent':
+        console.log('Message sent');
+        break;
+      case 'recipients':
+        updateRecipients(resp.recipients);
+        break;
+      case 'unreg_recipient':
+        recipient = resp.recipient;
+        console.log(recipient + 'disconnected');
+        break;
+      default:
+        console.log('Unknown response type ' + resp._type)
+    }
   };
 
+  function onSystemMessage(resp) {
+    console.log('system message received ' + resp.payload);
+  }
+
   function onError(event) {
-    error = 'ERROR: ' + event.data;
+    var error = 'ERROR: ' + event.data;
     showScreen(error, 'red');
   };
 
   function showMessage(message, from, is_mine) {
-    color = is_mine ? 'red' : 'blue'
+    var color = is_mine ? 'red' : 'blue';
     $('#output')
       .prepend('<p><span style="color: ' + color + ';">' + from + ': </span>' + message + '</p>');
   }

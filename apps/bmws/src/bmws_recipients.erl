@@ -1,14 +1,27 @@
 -module(bmws_recipients).
 
 -export([init/2]).
+-export([
+  json/0,
+  json/1
+]).
 
 init(Req, Opts) ->
-    AllRecipients = gproc:lookup_values({p, l, '_'}),
-    Names = lists:map(fun({_, Name}) -> Name end, AllRecipients),
-    SortedNames = lists:usort(Names),
-    Reply = jiffy:encode({[{recipients, SortedNames}]}),
-    Resp = cowboy_req:reply(200,
-                            [{<<"content-type">>, <<"application/json">>}],
-                            Reply,
-                            Req),
+    Resp = cowboy_req:reply(200, [
+      { <<"content-type">>, <<"application/json">> }
+    ], json(), Req),
     {ok, Resp, Opts}.
+
+json() ->
+    json([]).
+
+json(Without) ->
+    Values = gproc:lookup_values({p, l, '_'}),
+    AllRecipients = lists:usort(lists:map(fun({_, Name}) ->
+        Name
+    end, Values)),
+    Recipients = AllRecipients -- Without,
+    jiffy:encode({[
+        {'_type', recipients},
+        {recipients, Recipients}
+    ]}).
