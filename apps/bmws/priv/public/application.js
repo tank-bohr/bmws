@@ -22,11 +22,11 @@
     $('.js-recipient-list').on('change', updateRecipient);
 
     // updateRecipientList();
-  };
+  }
 
   function updateRecipient() {
     $('#recipient').val($('.js-recipient-list').val());
-  };
+  }
 
   // function updateRecipientList() {
   //   $.ajax({
@@ -51,15 +51,15 @@
       options.append(option);
       return option;
     });
-  };
+  }
 
   function login() {
     return $('#login').val();
-  };
+  }
 
   function serverHost() {
     return 'ws://' + window.location.host + '/websocket';
-  };
+  }
 
   function userHost() {
     if (login()) {
@@ -67,7 +67,7 @@
     } else {
       return serverHost();
     };
-  };
+  }
 
   function connect() {
     showScreen('<b>Connecting to: ' + userHost() + '</b>');
@@ -78,12 +78,12 @@
     websocket.onerror   = function(event) { onError(event)   };
     // updateRecipientList();
     $('.js-connect-button').html('disconnect');
-  };
+  }
 
   function disconnect() {
     websocket.close();
     $('.js-connect-button').html('connect');
-  };
+  }
 
   function toggleConnection() {
     if(websocket.readyState == websocket.OPEN){
@@ -91,7 +91,7 @@
     } else {
       connect();
     };
-  };
+  }
 
   function sendText() {
     if(websocket.readyState == websocket.OPEN) {
@@ -106,17 +106,17 @@
     } else {
       showScreen('websocket is not connected');
     };
-  };
+  }
 
   function onOpen(event) {
     showScreen('CONNECTED', 'green');
     $(".connected").fadeIn('slow');
     $(".content").fadeIn('slow');
-  };
+  }
 
   function onClose(event) {
     showScreen('DISCONNECTED', 'red');
-  };
+  }
 
   function onMessage(event) {
     var resp = JSON.parse(event.data);
@@ -137,7 +137,7 @@
       default:
         console.log('Unknown response type ' + resp._type)
     }
-  };
+  }
 
   function onSystemMessage(resp) {
     console.log('system message received ' + resp.payload);
@@ -146,7 +146,7 @@
   function onError(event) {
     var error = 'ERROR: ' + event.data;
     showScreen(error, 'red');
-  };
+  }
 
   function showMessage(message, from, is_mine) {
     var color = is_mine ? 'red' : 'blue';
@@ -157,7 +157,7 @@
   function showScreen(text, color) {
     $('#output')
       .prepend('<p><span style="color: ' + color + ';">' + text + '</span></p>');
-  };
+  }
 
   function showStatus(text, color) {
     $('.header .status')
@@ -166,7 +166,7 @@
 
   function clearScreen() {
     $('#output').html('');
-  };
+  }
 
   $(document).ready(init);
 
