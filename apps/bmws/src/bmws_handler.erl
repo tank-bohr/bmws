@@ -23,13 +23,13 @@ websocket_handle({text, Json}, Req, State) ->
     lager:info("websocket_handle name: ~w", [Name]),
     {Data} = jiffy:decode(Json),
     lager:debug("Data: ~w", [Data]),
-    Recepient = proplists:get_value(<<"recepient">>, Data),
-    lager:debug("Recepient: ~w", [Recepient]),
+    Recipient = proplists:get_value(<<"recipient">>, Data),
+    lager:debug("Recipient: ~w", [Recipient]),
     Message = proplists:get_value(<<"message">>, Data),
     lager:debug("Message: ~w", [Message]),
     JsonToSend = jiffy:encode({[{message, Message}, {from, Name}]}),
     lager:debug("JsonToSend: ~w", [JsonToSend]),
-    gproc:send({p, l, Recepient}, {json, JsonToSend}),
+    gproc:send({p, l, Recipient}, {json, JsonToSend}),
     Reply = jiffy:encode({[{message, <<"sent">>}, {from, me}]}),
     {reply, {text, Reply}, Req, State};
 websocket_handle(_Data, Req, State) ->

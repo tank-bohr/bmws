@@ -1,7 +1,7 @@
 (function () {
   var websocket;
 
-  var currentRecepient = null;
+  var currentRecipient = null;
 
   function init() {
     $('#server').val(userHost());
@@ -19,26 +19,26 @@
     $('.btn_send').on('click', sendText);
     $('.btn_clear').on('click', clearScreen);
 
-    $('.js-recepient-list').on('change', updateRecepient);
+    $('.js-recipient-list').on('change', updateRecipient);
   };
 
-  function updateRecepient() {
-    $('#recepient').val($('.js-recepient-list').val());
+  function updateRecipient() {
+    $('#recipient').val($('.js-recipient-list').val());
   };
 
-  function updateRecepientList() {
-    var options = $('.js-recepient-list');
-    var defaultOption = $('<option value="">Select a recepient</option>');
+  function updateRecipientList() {
+    var options = $('.js-recipient-list');
+    var defaultOption = $('<option value="">Select a recipient</option>');
 
     $.ajax({
       method: 'GET',
-      url: '/recepients',
+      url: '/recipients',
       success: function(resp) {
         options.html('');
         options.append(defaultOption);
-        var recepients = resp.recepients.map(function(r) {
+        var recipients = resp.recipients.map(function(r) {
           var option = $('<option value="' + r + '">' + r +  '</option>');
-          if(r === currentRecepient) {
+          if(r === currentRecipient) {
             option.attr('selected', 'selected');
           }
           options.append(option);
@@ -49,7 +49,7 @@
 
   };
 
-  updateRecepientList();
+  updateRecipientList();
 
   function login() {
     return $('#login').val();
@@ -74,7 +74,7 @@
     websocket.onclose   = function(event) { onClose(event)   };
     websocket.onmessage = function(event) { onMessage(event) };
     websocket.onerror   = function(event) { onError(event)   };
-    updateRecepientList();
+    updateRecipientList();
     $('.js-connect-button').html('disconnect');
   };
 
@@ -93,14 +93,14 @@
 
   function sendText() {
     if(websocket.readyState == websocket.OPEN) {
-      var recepient = $('#recepient').val();
-      currentRecepient = recepient;
+      var recipient = $('#recipient').val();
+      currentRecipient = recipient;
       var message = $('#message').val();
-      var resp = { 'message': message, 'recepient': recepient };
+      var resp = { 'message': message, 'recipient': recipient };
       websocket.send(JSON.stringify(resp));
       showMessage(message, login(), true);
       $("#message").val("");
-      updateRecepientList();
+      updateRecipientList();
     } else {
       showScreen('websocket is not connected');
     };

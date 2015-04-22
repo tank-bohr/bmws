@@ -7,11 +7,11 @@ body {
   width: 50%;
 }
 
-.form-group.recepient-list {
+.form-group.recipient-list {
   width: 20%;
 }
-.form-group.recepient-list select,
-.form-group.new-recepient input {
+.form-group.recipient-list select,
+.form-group.new-recipient input {
   width: 100%;
 }
 

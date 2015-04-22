@@ -21,7 +21,7 @@ init([]) ->
         {'_', [
             {"/", cowboy_static, {priv_file, bmws, "index.html"}},
             {"/websocket/[users/:name]", bmws_handler, []},
-            {"/recepients", bmws_recepients, []},
+            {"/recipients", bmws_recipients, []},
             {"/public/[...]", cowboy_static, {priv_dir, bmws, "public"}}
         ]}
     ]),

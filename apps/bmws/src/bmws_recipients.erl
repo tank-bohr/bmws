@@ -1,11 +1,11 @@
--module(bmws_recepients).
+-module(bmws_recipients).
 
 -export([init/2]).
 
 init(Req, Opts) ->
-    AllRecepients = gproc:lookup_values({p, l, '_'}),
-    Names = lists:map(fun({_, Name}) -> Name end, AllRecepients),
-    Reply = jiffy:encode({[{recepients, Names}]}),
+    AllRecipients = gproc:lookup_values({p, l, '_'}),
+    Names = lists:map(fun({_, Name}) -> Name end, AllRecipients),
+    Reply = jiffy:encode({[{recipients, Names}]}),
     Resp = cowboy_req:reply(200,
                             [{<<"content-type">>, <<"application/json">>}],
                             Reply,
