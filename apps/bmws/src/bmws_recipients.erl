@@ -1,16 +1,9 @@
 -module(bmws_recipients).
 
--export([init/2]).
 -export([
   json/0,
   json/1
 ]).
-
-init(Req, Opts) ->
-    Resp = cowboy_req:reply(200, [
-      { <<"content-type">>, <<"application/json">> }
-    ], json(), Req),
-    {ok, Resp, Opts}.
 
 json() ->
     json([]).

@@ -20,23 +20,11 @@
     $('.btn_clear').on('click', clearScreen);
 
     $('.js-recipient-list').on('change', updateRecipient);
-
-    // updateRecipientList();
   }
 
   function updateRecipient() {
     $('#recipient').val($('.js-recipient-list').val());
   }
-
-  // function updateRecipientList() {
-  //   $.ajax({
-  //     method: 'GET',
-  //     url: '/recipients',
-  //     success: function(resp) {
-  //       updateRecipients(resp.recipients)
-  //     }
-  //   })
-  // };
 
   function updateRecipients(recipients) {
     var options = $('.js-recipient-list');
@@ -76,7 +64,6 @@
     websocket.onclose   = function(event) { onClose(event)   };
     websocket.onmessage = function(event) { onMessage(event) };
     websocket.onerror   = function(event) { onError(event)   };
-    // updateRecipientList();
     $('.js-connect-button').html('disconnect');
   }
 
@@ -102,7 +89,6 @@
       websocket.send(JSON.stringify(resp));
       showMessage(message, login(), true);
       $("#message").val("");
-      // updateRecipientList();
     } else {
       showScreen('websocket is not connected');
     };
