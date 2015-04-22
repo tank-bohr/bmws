@@ -1,6 +1,8 @@
 (function () {
   var websocket;
 
+  var currentRecepient = null;
+
   function init() {
     $('#server').val(userHost());
     if ('WebSocket' in window) {
@@ -16,7 +18,38 @@
     $('.btn_connect').on('click', toggleConnection);
     $('.btn_send').on('click', sendText);
     $('.btn_clear').on('click', clearScreen);
+
+    $('.js-recepient-list').on('change', updateRecepient);
   };
+
+  function updateRecepient() {
+    $('#recepient').val($('.js-recepient-list').val());
+  };
+
+  function updateRecepientList() {
+    var options = $('.js-recepient-list');
+    var defaultOption = $('<option value="">Select a recepient</option>');
+
+    $.ajax({
+      method: 'GET',
+      url: '/recepients',
+      success: function(resp) {
+        options.html('');
+        options.append(defaultOption);
+        var recepients = resp.recepients.map(function(r) {
+          var option = $('<option value="' + r + '">' + r +  '</option>');
+          if(r === currentRecepient) {
+            option.attr('selected', 'selected');
+          }
+          options.append(option);
+          return option;
+        });
+      }
+    })
+
+  };
+
+  updateRecepientList();
 
   function login() {
     return $('#login').val();
@@ -41,10 +74,13 @@
     websocket.onclose   = function(event) { onClose(event)   };
     websocket.onmessage = function(event) { onMessage(event) };
     websocket.onerror   = function(event) { onError(event)   };
+    updateRecepientList();
+    $('.js-connect-button').html('disconnect');
   };
 
   function disconnect() {
     websocket.close();
+    $('.js-connect-button').html('connect');
   };
 
   function toggleConnection() {
@@ -58,11 +94,13 @@
   function sendText() {
     if(websocket.readyState == websocket.OPEN) {
       var recepient = $('#recepient').val();
+      currentRecepient = recepient;
       var message = $('#message').val();
       var resp = { 'message': message, 'recepient': recepient };
       websocket.send(JSON.stringify(resp));
       showMessage(message, login(), true);
       $("#message").val("");
+      updateRecepientList();
     } else {
       showScreen('websocket is not connected');
     };

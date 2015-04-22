@@ -9,7 +9,7 @@
 
     <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
     <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"> -->
-    <script src="/public/application.js"></script>
+      <script src="/public/application.js"></script>
   </head>
 
   <body>
@@ -21,13 +21,13 @@
     <div class="panel panel-default">
       <div class="panel-body">
         <div class="form-inline">
-          <div class="form-group">
-            <input type="text" class="form-control" id="login" placeholder="Login" />
-          </div>
           <div class="form-group server">
             <input type="text" class="form-control" id="server" />
           </div>
-          <button class="btn btn-default btn_connect">connect</button>
+          <div class="form-group">
+            <input type="text" class="form-control" id="login" placeholder="Login" />
+          </div>
+          <button class="btn btn-default btn_connect js-connect-button">connect</button>
         </div>
       </div>
     </div>
@@ -35,7 +35,16 @@
     <div class="connected panel panel-default">
       <div class="panel-body">
         <div class="form-group">
-          <input type="text" class="form-control" id="recepient" placeholder="Recepient" />
+          <div class="form-inline">
+            <div class="form-group recepient-list">
+              <select class="form-control js-recepient-list">
+                <option default>Select a recepient</option>
+              </select>
+            </div>
+            <div class="form-group new-recepient">
+              <input type="text" class="form-control" id="recepient" placeholder="or specify a new one" />
+            </div>
+          </div>
         </div>
         <div class="form-group">
           <textarea class="form-control" rows="3" id="message" placeholder="Message" ></textarea>
