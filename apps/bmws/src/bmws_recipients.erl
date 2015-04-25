@@ -5,11 +5,13 @@
   json/1
 ]).
 
+-define(UserPattern, {user, '_'}).
+
 json() ->
     json([]).
 
 json(Without) ->
-    Values = gproc:lookup_values({p, l, '_'}),
+    Values = gproc:lookup_values({p, l, ?UserPattern}),
     AllRecipients = lists:usort(lists:map(fun({_, Name}) ->
         Name
     end, Values)),

@@ -19,8 +19,8 @@ init(Req, Opts) ->
             lager:info("init name: ~w", [Name]),
             ok = monitor_recipients(),
             self() ! {json, bmws_recipients:json()},
-            gproc:send({p, l, '_'}, {new_recipient, Name}),
-            gproc:reg({p, l, Name}, Name),
+            gproc:send({p, l, {user, '_'}}, {new_recipient, Name}),
+            gproc:reg({p, l, {user, Name}}, Name),
             #state{user = #user{name=Name}, opts=Opts}
     end,
     {cowboy_websocket, Req, State}.
@@ -29,7 +29,7 @@ websocket_handle({text, Json}, Req, State) ->
     { Message, Recipient } = parse_message_json(Json),
     Name = extract_name(State),
     JsonToSend = message_json(Message, Name),
-    gproc:send({p, l, Recipient}, {json, JsonToSend}),
+    gproc:send({p, l, {user, Recipient}}, {json, JsonToSend}),
     Reply = sent_json(),
     {reply, {text, Reply}, Req, State};
 websocket_handle(_Data, Req, State) ->
@@ -59,7 +59,7 @@ extract_name(Req) -> %% is_record(Req, http_req)
 monitor_recipients() ->
     lists:foreach(fun({Pid, _Name}) ->
         _MonitorRef = monitor(process, Pid)
-    end, gproc:lookup_values({p, l, '_'})).
+    end, gproc:lookup_values({p, l, {user, '_'}})).
 
 parse_message_json(Json) ->
     { Data }  = jiffy:decode(Json),
